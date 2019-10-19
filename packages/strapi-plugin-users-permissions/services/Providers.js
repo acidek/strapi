@@ -336,19 +336,46 @@ const getProfile = async (provider, query, callback) => {
       const instagram = new Purest({
         provider: 'instagram',
         key: grant.instagram.key,
-        secret: grant.instagram.secret
+        secret: grant.instagram.secret,
       });
-    
-      instagram.query().get('users/self').qs({access_token}).request((err, res, body) => {
-        if (err) {
-          callback(err);
-        } else {
-          callback(null, {
-            username: body.data.username,
-            email: `${body.data.username}@strapi.io` // dummy email as Instagram does not provide user email
-          });
-        }
+
+      instagram
+        .query()
+        .get('users/self')
+        .qs({ access_token })
+        .request((err, res, body) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, {
+              username: body.data.username,
+              email: `${body.data.username}@strapi.io`, // dummy email as Instagram does not provide user email
+            });
+          }
+        });
+      break;
+    }
+    case 'apple': {
+      const instagram = new Purest({
+        provider: 'apple',
+        key: grant.apple.key,
+        secret: grant.apple.secret,
       });
+
+      instagram
+        .query()
+        .get('users/self')
+        .qs({ access_token })
+        .request((err, res, body) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, {
+              username: body.data.username,
+              email: `${body.data.username}@strapi.io`, // dummy email as Instagram does not provide user email
+            });
+          }
+        });
       break;
     }
     default:
