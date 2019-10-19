@@ -359,6 +359,29 @@ const getProfile = async (provider, query, callback) => {
         });
       break;
     }
+    case 'apple': {
+      const apple = new Purest({
+        provider: 'apple',
+        key: grant.apple.key,
+        secret: grant.apple.secret,
+      });
+
+      apple
+        .query()
+        .get('users/self')
+        .qs({ access_token })
+        .request((err, res, body) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, {
+              username: body.data.username,
+              email: `${body.data.username}@strapi.io`, // dummy email as Instagram does not provide user email
+            });
+          }
+        });
+      break;
+    }
     default:
       callback({
         message: 'Unknown provider.',

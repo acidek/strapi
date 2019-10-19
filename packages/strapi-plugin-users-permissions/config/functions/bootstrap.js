@@ -97,6 +97,13 @@ module.exports = async () => {
       callback: '/auth/vk/callback',
       scope: ['email'],
     },
+    apple: {
+      enabled: false,
+      icon: 'apple',
+      key: '',
+      secret: '',
+      callback: '/auth/apple/callback',
+    },
   };
   const prevGrantConfig = (await pluginStore.get({ key: 'grant' })) || {};
   // store grant auth config to db
