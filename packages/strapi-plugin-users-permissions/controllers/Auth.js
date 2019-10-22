@@ -271,6 +271,23 @@ module.exports = {
       ctx.query && ctx.query.callback
         ? ctx.query.callback
         : grantConfig[provider].callback;
+
+    // console.log(config);
+    // console.log('-----------');
+    // console.log(ctx);
+    // if (provider === 'apple') {
+    //   grantConfig[provider].custom_params = { response_mode: 'form_post' };
+    //   grantConfig[provider].secret = strapi.plugins[
+    //     'users-permissions'
+    //   ].services.applesignin.getClientSecret({
+    //     clientID: config.key,
+    //     teamId: config.teamId,
+    //     keyIdentifier: config.keyIdentifier,
+    //     privateKeyPath: config.privateKeyPath,
+    //   });
+    // }
+    // console.log(provider);
+
     return grant(grantConfig)(ctx, next);
   },
 

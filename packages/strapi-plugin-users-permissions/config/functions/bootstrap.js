@@ -99,10 +99,19 @@ module.exports = async () => {
     },
     apple: {
       enabled: false,
+      authorize_url: 'https://appleid.apple.com/auth/authorize',
+      access_url: 'https://appleid.apple.com/auth/token',
       icon: 'apple',
       key: '',
+      oauth: 2,
       secret: '',
       callback: '/auth/apple/callback',
+      scope: ['email'],
+      teamId: '',
+      keyIdentifier: '',
+      privateKeyPath: '',
+      custom_params: { response_mode: 'form_post' },
+      redirect_uri: 'https://api.pidak.cz/connect/apple/callback',
     },
   };
   const prevGrantConfig = (await pluginStore.get({ key: 'grant' })) || {};

@@ -24,12 +24,10 @@ const purestConfig = require('@purest/providers');
 
 exports.connect = (provider, query) => {
   const access_token = query.access_token || query.code || query.oauth_token;
-
   return new Promise((resolve, reject) => {
     if (!access_token) {
       return reject([null, { message: 'No access_token.' }]);
     }
-
     // Get the profile.
     getProfile(provider, query, async (err, profile) => {
       if (err) {
@@ -362,10 +360,23 @@ const getProfile = async (provider, query, callback) => {
     case 'apple': {
       const apple = new Purest({
         provider: 'apple',
-        key: grant.apple.key,
-        secret: grant.apple.secret,
+        config: {
+          apple: {
+            'https://appleid.apple.com': {
+              __domain: {
+                auth: {
+                  auth: { bearer: '[0]' },
+                },
+              },
+              '{endpoint}': {
+                __path: {
+                  alias: '__default',
+                },
+              },
+            },
+          },
+        },
       });
-
       apple
         .query()
         .get('users/self')
