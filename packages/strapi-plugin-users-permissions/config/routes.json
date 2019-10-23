@@ -245,6 +245,20 @@
     },
     {
       "method": "POST",
+      "path": "/auth/:provider/callback",
+      "handler": "Auth.callbackPost",
+      "config": {
+        "policies": [],
+        "prefix": "",
+        "description": "Successfull redirection after approving a provider",
+        "tag": {
+          "plugin": "users-permissions",
+          "name": "User"
+        }
+      }
+    },
+    {
+      "method": "POST",
       "path": "/auth/forgot-password",
       "handler": "Auth.forgotPassword",
       "config": {

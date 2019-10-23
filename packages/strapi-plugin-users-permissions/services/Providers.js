@@ -23,6 +23,8 @@ const purestConfig = require('@purest/providers');
  */
 
 exports.connect = (provider, query) => {
+  console.log('profile');
+  console.log(query);
   const access_token = query.access_token || query.code || query.oauth_token;
   return new Promise((resolve, reject) => {
     if (!access_token) {
@@ -358,39 +360,31 @@ const getProfile = async (provider, query, callback) => {
       break;
     }
     case 'apple': {
-      const apple = new Purest({
-        provider: 'apple',
-        config: {
-          apple: {
-            'https://appleid.apple.com': {
-              __domain: {
-                auth: {
-                  auth: { bearer: '[0]' },
-                },
-              },
-              '{endpoint}': {
-                __path: {
-                  alias: '__default',
-                },
-              },
-            },
-          },
-        },
-      });
-      apple
-        .query()
-        .get('users/self')
-        .qs({ access_token })
-        .request((err, res, body) => {
-          if (err) {
-            callback(err);
-          } else {
-            callback(null, {
-              username: body.data.username,
-              email: `${body.data.username}@strapi.io`, // dummy email as Instagram does not provide user email
-            });
-          }
+      //tady potrebuju udelat  https://appleid.apple.com/auth/token?code=CODE_FROM_APPLEID&redirect_uri=https://www.example.com/handle/&client_id=www.example.com&client_secret=DONT_TELL
+      try {
+        var secret = strapi.plugins[
+          'users-permissions'
+        ].services.applesignin.getClientSecret({
+          clientID: grant[provider].key,
+          teamId: grant[provider].teamId,
+          keyIdentifier: grant[provider].keyIdentifier,
+          privateKeyPath: grant[provider].privateKeyPath,
         });
+        var options = {
+          clientID: grant[provider].key,
+          redirectUri: grant[provider].redirect_uri,
+          clientSecret: secret,
+        };
+        var body = await strapi.plugins[
+          'users-permissions'
+        ].services.applesignin.getAuthorizationToken(access_token, options);
+        callback(null, {
+          username: body.user ? body.user : body.email,
+          email: body.email,
+        });
+      } catch (err) {
+        callback(err);
+      }
       break;
     }
     default:

@@ -72,7 +72,10 @@ const getAuthorizationToken = async (code, options) => {
   };
 
   const body = await request({ url: url.toString(), method: 'POST', form });
-  return JSON.parse(body);
+  const bodyo = JSON.parse(body);
+  var res = jwt.decode(bodyo.id_token);
+  res.access_token = bodyo.access_token;
+  return res;
 };
 
 const refreshAuthorizationToken = async (refreshToken, options) => {

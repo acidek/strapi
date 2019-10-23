@@ -18,6 +18,11 @@ const formatError = error => [
 ];
 
 module.exports = {
+  async callbackPost(ctx) {
+    console.log(ctx);
+    ctx.query = ctx.request.body;
+    await this.callback(ctx);
+  },
   async callback(ctx) {
     const provider = ctx.params.provider || 'local';
     const params = ctx.request.body;
