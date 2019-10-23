@@ -23,8 +23,6 @@ const purestConfig = require('@purest/providers');
  */
 
 exports.connect = (provider, query) => {
-  console.log('profile');
-  console.log(query);
   const access_token = query.access_token || query.code || query.oauth_token;
   return new Promise((resolve, reject) => {
     if (!access_token) {
