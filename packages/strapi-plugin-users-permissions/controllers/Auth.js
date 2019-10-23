@@ -19,7 +19,6 @@ const formatError = error => [
 
 module.exports = {
   async callbackPost(ctx) {
-    console.log(ctx);
     ctx.query = ctx.request.body;
     await this.callback(ctx);
   },
