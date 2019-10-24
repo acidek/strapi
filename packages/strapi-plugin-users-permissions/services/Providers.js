@@ -24,12 +24,17 @@ const purestConfig = require('@purest/providers');
 
 exports.connect = (provider, query) => {
   const access_token = query.access_token || query.code || query.oauth_token;
+  console.log('providerConnect');
   return new Promise((resolve, reject) => {
     if (!access_token) {
       return reject([null, { message: 'No access_token.' }]);
     }
+    console.log('getProfile');
     // Get the profile.
     getProfile(provider, query, async (err, profile) => {
+      console.log('getProfileCall');
+      console.log(profile);
+      console.log(err);
       if (err) {
         return reject([null, err]);
       }
@@ -359,25 +364,29 @@ const getProfile = async (provider, query, callback) => {
     }
     case 'apple': {
       //tady potrebuju udelat  https://appleid.apple.com/auth/token?code=CODE_FROM_APPLEID&redirect_uri=https://www.example.com/handle/&client_id=www.example.com&client_secret=DONT_TELL
+      console.log('providerApple');
       try {
         var clientID = grant[provider].key;
         if (query.app_id) clientID = query.app_id;
         var secret = strapi.plugins[
           'users-permissions'
         ].services.applesignin.getClientSecret({
-          clientID: clientID,
+          clientID: grant[provider].key,
           teamId: grant[provider].teamId,
           keyIdentifier: grant[provider].keyIdentifier,
           privateKeyPath: grant[provider].privateKeyPath,
         });
+        console.log('providerAppleSecret' + secret);
         var options = {
           clientID: clientID,
           redirectUri: grant[provider].redirect_uri,
           clientSecret: secret,
         };
+        console.log(options);
         var body = await strapi.plugins[
           'users-permissions'
         ].services.applesignin.getAuthorizationToken(access_token, options);
+        console.log(body);
         callback(null, {
           username: body.user ? body.user : body.email,
           email: body.email,
