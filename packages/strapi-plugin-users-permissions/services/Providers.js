@@ -371,7 +371,7 @@ const getProfile = async (provider, query, callback) => {
           privateKeyPath: grant[provider].privateKeyPath,
         });
         var options = {
-          clientID: grant[provider].key,
+          clientID: clientID,
           redirectUri: grant[provider].redirect_uri,
           clientSecret: secret,
         };
