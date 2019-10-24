@@ -371,7 +371,7 @@ const getProfile = async (provider, query, callback) => {
         var secret = strapi.plugins[
           'users-permissions'
         ].services.applesignin.getClientSecret({
-          clientID: grant[provider].key,
+          clientID: clientID,
           teamId: grant[provider].teamId,
           keyIdentifier: grant[provider].keyIdentifier,
           privateKeyPath: grant[provider].privateKeyPath,
