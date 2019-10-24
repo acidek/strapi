@@ -360,10 +360,12 @@ const getProfile = async (provider, query, callback) => {
     case 'apple': {
       //tady potrebuju udelat  https://appleid.apple.com/auth/token?code=CODE_FROM_APPLEID&redirect_uri=https://www.example.com/handle/&client_id=www.example.com&client_secret=DONT_TELL
       try {
+        var clientID = grant[provider].key;
+        if (query.app_id) clientID = query.app_id;
         var secret = strapi.plugins[
           'users-permissions'
         ].services.applesignin.getClientSecret({
-          clientID: grant[provider].key,
+          clientID: clientID,
           teamId: grant[provider].teamId,
           keyIdentifier: grant[provider].keyIdentifier,
           privateKeyPath: grant[provider].privateKeyPath,
